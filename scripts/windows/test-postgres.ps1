@@ -14,7 +14,7 @@ $env:FLEET_DATABASE_URL = $Matches[1]
 
 Push-Location $projectRoot
 try {
-  corepack pnpm integration
+  & "D:\node\corepack.cmd" pnpm vitest run packages/postgres/test/postgres.integration.test.ts
   if ($LASTEXITCODE -ne 0) { throw "PostgreSQL integration tests failed" }
 }
 finally {

@@ -2,7 +2,7 @@
 
 独立的 iPhone Fleet Agent 项目：以通用 Phone Operator 与确定性 Fleet Control Plane 为目标。
 
-当前状态：Phase A Control Plane 实施中。A0～A5 已通过本地 Gate；真实 iOS 验证仍等待 M0+ 的 macOS Device Lab。
+当前状态：Phase A Control Plane 已通过 A0～A6；真实 iOS 验证仍等待 M0+ 的 macOS Device Lab。
 
 ## Architecture Baseline
 
@@ -24,7 +24,10 @@ Gate 顺序固定为：`A0 → A1 → A2 → A3 → A4 → A5 → A6 → M0+`。
 - `pnpm unit` / `pnpm contract` / `pnpm e2e-mock`
 - `pnpm integration:postgres`：Windows client + WSL user-local PostgreSQL
 - `pnpm integration:hatchet`：Windows build + WSL official Hatchet Embedded
-- `pnpm verify`：Windows Control Plane/mock verification
+- `pnpm integration:openadapt`：WSL Python 3.12 no-device feasibility spike
+- `pnpm verify:windows`：Windows Control Plane/mock verification
+- `pnpm verify:wsl`：PostgreSQL、Hatchet、OpenAdapt WSL integration
+- `pnpm verify`：Phase A 全部 Windows + WSL 验证
 - `pnpm real-ios:e2e`：M0+ 之前固定失败，防止把 mock 结果误报为 real iOS
 
 Mac 接手清单见 [`docs/poc/mac-m0-handoff.md`](docs/poc/mac-m0-handoff.md)。
