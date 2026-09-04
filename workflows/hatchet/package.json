@@ -1,0 +1,20 @@
+{
+  "name": "@iphone-fleet-agent/hatchet-workflows",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "integration": "node dist/a4-integration.js"
+  },
+  "dependencies": {
+    "@hatchet-dev/typescript-sdk": "1.31.0",
+    "@iphone-fleet/contracts": "workspace:*",
+    "zod": "4.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "26.4.1",
+    "typescript": "7.0.2"
+  }
+}
