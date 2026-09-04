@@ -7,6 +7,7 @@
     { "path": "packages/state-machines" },
     { "path": "packages/inmemory" },
     { "path": "packages/control-plane" },
+    { "path": "packages/postgres" },
     { "path": "apps/fleetctl" },
     { "path": "apps/fleet-mcp" }
   ]

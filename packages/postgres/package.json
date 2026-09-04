@@ -1,0 +1,28 @@
+{
+  "name": "@iphone-fleet/postgres",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -p tsconfig.json --noEmit --composite false",
+    "migrate": "tsx src/migrate.ts"
+  },
+  "dependencies": {
+    "@iphone-fleet/application": "workspace:*",
+    "@iphone-fleet/contracts": "workspace:*",
+    "@iphone-fleet/domain": "workspace:*",
+    "node-pg-migrate": "9.0.0",
+    "pg": "8.23.0"
+  },
+  "devDependencies": {
+    "@types/pg": "8.23.1",
+    "tsx": "4.23.13"
+  }
+}

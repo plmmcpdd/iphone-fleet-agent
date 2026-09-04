@@ -11,6 +11,7 @@
     "unit": "vitest run --config vitest.unit.config.ts",
     "contract": "vitest run --config vitest.contract.config.ts",
     "integration": "vitest run --config vitest.integration.config.ts",
+    "integration:postgres": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows/test-postgres.ps1",
     "e2e-mock": "vitest run --config vitest.e2e-mock.config.ts",
     "verify": "corepack pnpm build && corepack pnpm typecheck && corepack pnpm lint && corepack pnpm unit && corepack pnpm contract && corepack pnpm e2e-mock",
     "real-ios:e2e": "node -e \"console.error('BLOCKED: macOS Device Lab and real iPhone are required (M0+).'); process.exit(2)\""

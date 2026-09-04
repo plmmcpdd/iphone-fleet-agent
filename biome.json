@@ -4,6 +4,7 @@
     "includes": [
       "**",
       "!!**/.git",
+      "!!**/.runtime",
       "!!**/dist",
       "!!**/coverage",
       "!!**/node_modules",
