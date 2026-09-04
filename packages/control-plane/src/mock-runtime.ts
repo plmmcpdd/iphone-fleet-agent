@@ -1,3 +1,4 @@
+import type { EvidenceSink } from "@iphone-fleet/application";
 import type { PolicyEvaluator } from "@iphone-fleet/domain";
 import {
   InMemoryDeviceLeaseStore,
@@ -8,7 +9,7 @@ import {
 } from "@iphone-fleet/inmemory";
 import { FleetControlPlane } from "./fleet-control-plane.js";
 
-export function createMockFleetRuntime() {
+export function createMockFleetRuntime(options: { evidence?: EvidenceSink } = {}) {
   const clock = new SystemClock();
   const registry = new InMemoryRegistry({
     devices: [
@@ -40,7 +41,7 @@ export function createMockFleetRuntime() {
     ],
   });
   const leases = new InMemoryDeviceLeaseStore(clock);
-  const evidence = new InMemoryEvidenceSink();
+  const evidence = options.evidence ?? new InMemoryEvidenceSink();
   const backend = new MockDeviceBackend(clock);
   backend.configure("DEVICE-MOCK-001", { online: true, initialState: { screen: "home" } });
   const policy: PolicyEvaluator = {

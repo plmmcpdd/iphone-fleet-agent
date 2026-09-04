@@ -11,7 +11,7 @@ coverage/
 *.tsbuildinfo
 
 # Local runtime data and evidence
-evidence/
+/evidence/
 artifacts/
 tmp/
 .runtime/

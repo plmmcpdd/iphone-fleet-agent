@@ -16,6 +16,7 @@ import type {
 import { FleetError, type PolicyEvaluator } from "@iphone-fleet/domain";
 import type { Clock } from "@iphone-fleet/inmemory";
 import { SystemClock } from "@iphone-fleet/inmemory";
+import { withFleetSpan } from "@iphone-fleet/observability";
 
 export interface SubmitFleetJob {
   readonly jobId: JobId;
@@ -184,13 +185,24 @@ export class FleetControlPlane {
 
       const health = await this.dependencies.backend.health(context.deviceId);
       if (!health.online) throw new FleetError("DEVICE_OFFLINE", "Device backend reports offline");
+      const activeContext = context;
 
-      const actionResult = await this.dependencies.backend.execute(context, input.action);
+      const actionResult = await withFleetSpan(
+        "fleet.device.action",
+        activeContext,
+        { "fleet.action.name": input.action.name },
+        () => this.dependencies.backend.execute(activeContext, input.action),
+      );
       if (actionResult.outcome !== "SUCCEEDED") {
         throw new FleetError("VERIFICATION_FAILED", actionResult.message ?? "Device action failed");
       }
 
-      const verification = await this.dependencies.backend.verify(context, input.verification);
+      const verification = await withFleetSpan(
+        "fleet.device.verify",
+        activeContext,
+        { "fleet.verification.name": input.verification.name },
+        () => this.dependencies.backend.verify(activeContext, input.verification),
+      );
       if (!verification.verified) {
         throw new FleetError(
           "VERIFICATION_FAILED",
@@ -266,15 +278,21 @@ export class FleetControlPlane {
     outcome: EvidenceRecord["outcome"],
     details: Readonly<Record<string, unknown>>,
   ): Promise<void> {
-    await this.dependencies.evidence.append({
-      evidenceId: `EVIDENCE-${randomUUID()}`,
+    await withFleetSpan(
+      "fleet.evidence.append",
       context,
-      workflowRevision: input.workflowRevision,
-      step,
-      timestamp: this.clock.now().toISOString(),
-      outcome,
-      details,
-    });
+      { "fleet.evidence.step": step, "fleet.evidence.outcome": outcome },
+      () =>
+        this.dependencies.evidence.append({
+          evidenceId: `EVIDENCE-${randomUUID()}`,
+          context,
+          workflowRevision: input.workflowRevision,
+          step,
+          timestamp: this.clock.now().toISOString(),
+          outcome,
+          details,
+        }),
+    );
   }
 
   private normalizeError(error: unknown): { code: string; message: string } {

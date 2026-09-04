@@ -11,6 +11,7 @@
     { "path": "../contracts" },
     { "path": "../domain" },
     { "path": "../application" },
-    { "path": "../inmemory" }
+    { "path": "../inmemory" },
+    { "path": "../observability" }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@iphone-fleet/control-plane",
+  "name": "@iphone-fleet/evidence",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -15,9 +15,6 @@
   },
   "dependencies": {
     "@iphone-fleet/application": "workspace:*",
-    "@iphone-fleet/contracts": "workspace:*",
-    "@iphone-fleet/domain": "workspace:*",
-    "@iphone-fleet/inmemory": "workspace:*",
-    "@iphone-fleet/observability": "workspace:*"
+    "@iphone-fleet/contracts": "workspace:*"
   }
 }

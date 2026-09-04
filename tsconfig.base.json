@@ -13,7 +13,9 @@
       "@iphone-fleet/state-machines": ["./packages/state-machines/src/index.ts"],
       "@iphone-fleet/inmemory": ["./packages/inmemory/src/index.ts"],
       "@iphone-fleet/control-plane": ["./packages/control-plane/src/index.ts"],
-      "@iphone-fleet/postgres": ["./packages/postgres/src/index.ts"]
+      "@iphone-fleet/postgres": ["./packages/postgres/src/index.ts"],
+      "@iphone-fleet/evidence": ["./packages/evidence/src/index.ts"],
+      "@iphone-fleet/observability": ["./packages/observability/src/index.ts"]
     },
     "strict": true,
     "noUncheckedIndexedAccess": true,
