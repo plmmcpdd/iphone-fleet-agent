@@ -1,0 +1,28 @@
+# Node / pnpm
+node_modules/
+.pnpm-store/
+.npm/
+
+# Build and test outputs
+dist/
+build/
+coverage/
+.turbo/
+*.tsbuildinfo
+
+# Local runtime data and evidence
+evidence/
+artifacts/
+tmp/
+
+# Environment and logs
+.env
+.env.*
+!.env.example
+*.log
+
+# Editor and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
