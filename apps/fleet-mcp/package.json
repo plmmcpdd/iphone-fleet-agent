@@ -1,0 +1,17 @@
+{
+  "name": "@iphone-fleet/fleet-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -p tsconfig.json --noEmit --composite false",
+    "start": "tsx src/main.ts"
+  },
+  "dependencies": {
+    "@iphone-fleet/control-plane": "workspace:*",
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "tsx": "4.23.13",
+    "zod": "4.5.4"
+  }
+}

@@ -3,13 +3,16 @@
   "compilerOptions": {
     "target": "ES2024",
     "lib": ["ES2024"],
+    "types": ["node"],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "paths": {
       "@iphone-fleet/contracts": ["./packages/contracts/src/index.ts"],
       "@iphone-fleet/domain": ["./packages/domain/src/index.ts"],
       "@iphone-fleet/application": ["./packages/application/src/index.ts"],
-      "@iphone-fleet/state-machines": ["./packages/state-machines/src/index.ts"]
+      "@iphone-fleet/state-machines": ["./packages/state-machines/src/index.ts"],
+      "@iphone-fleet/inmemory": ["./packages/inmemory/src/index.ts"],
+      "@iphone-fleet/control-plane": ["./packages/control-plane/src/index.ts"]
     },
     "strict": true,
     "noUncheckedIndexedAccess": true,

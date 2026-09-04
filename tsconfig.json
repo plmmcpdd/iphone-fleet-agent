@@ -4,6 +4,10 @@
     { "path": "packages/contracts" },
     { "path": "packages/domain" },
     { "path": "packages/application" },
-    { "path": "packages/state-machines" }
+    { "path": "packages/state-machines" },
+    { "path": "packages/inmemory" },
+    { "path": "packages/control-plane" },
+    { "path": "apps/fleetctl" },
+    { "path": "apps/fleet-mcp" }
   ]
 }

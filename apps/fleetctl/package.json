@@ -1,0 +1,18 @@
+{
+  "name": "@iphone-fleet/fleetctl",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "fleetctl": "./dist/main.js"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -p tsconfig.json --noEmit --composite false",
+    "start": "tsx src/main.ts"
+  },
+  "dependencies": {
+    "@iphone-fleet/control-plane": "workspace:*",
+    "tsx": "4.23.13"
+  }
+}

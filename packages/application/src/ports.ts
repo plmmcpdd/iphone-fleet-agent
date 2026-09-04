@@ -96,4 +96,10 @@ export interface RegistryReader {
   getNetworkAssignment(
     networkAssignmentId: ExecutionContext["networkAssignmentId"],
   ): Promise<NetworkAssignmentRecord | undefined>;
+  listDevices(): Promise<readonly DeviceRecord[]>;
+  findDevice(input: {
+    readonly clientId: ExecutionContext["clientId"];
+    readonly accountId: ExecutionContext["accountId"];
+    readonly networkAssignmentId: ExecutionContext["networkAssignmentId"];
+  }): Promise<DeviceRecord | undefined>;
 }
