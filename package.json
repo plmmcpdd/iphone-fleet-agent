@@ -10,7 +10,7 @@
     "lint": "biome check .",
     "unit": "vitest run --config vitest.unit.config.ts",
     "contract": "vitest run --config vitest.contract.config.ts",
-    "integration:local": "vitest run packages/evidence/test/local-evidence.integration.test.ts packages/observability/test/tracing.integration.test.ts packages/observability/test/control-plane-tracing.integration.test.ts",
+    "integration:local": "vitest run --config vitest.integration.config.ts",
     "integration": "corepack pnpm integration:local && corepack pnpm integration:postgres && corepack pnpm integration:hatchet && corepack pnpm integration:openadapt",
     "integration:postgres": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows/test-postgres.ps1",
     "integration:hatchet": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows/test-hatchet.ps1",
