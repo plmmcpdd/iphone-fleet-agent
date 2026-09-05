@@ -10,6 +10,12 @@ import { FleetError } from "@iphone-fleet/domain";
 import type { Clock } from "./clock.js";
 import { SystemClock } from "./clock.js";
 
+/**
+ * Single-process mock/development test double only.
+ *
+ * This store provides no multi-process concurrency guarantee. Production and
+ * durable runtimes must use the PostgreSQL DeviceLeaseStore.
+ */
 export class InMemoryDeviceLeaseStore implements DeviceLeaseStore {
   private readonly active = new Map<DeviceId, DeviceLease>();
   private readonly nextTokens = new Map<DeviceId, number>();

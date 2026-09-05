@@ -117,6 +117,57 @@ describe("PostgreSQL Registry and Device Lease", () => {
     });
   });
 
+  it("does not overwrite an active lease when the preflight active check is bypassed", async () => {
+    const store = new PostgresDeviceLeaseStore(pool);
+    const first = await store.acquire(request);
+    const fencingBefore = await pool.query<{ last_token: string }>(
+      "SELECT last_token FROM device_fencing WHERE device_id = $1",
+      [request.deviceId],
+    );
+    const bypassPool = {
+      connect: async () => {
+        const client = await pool.connect();
+        return {
+          query: async (query: string, values?: readonly unknown[]) => {
+            if (
+              query === "SELECT * FROM device_leases WHERE device_id = $1 AND expires_at > now()"
+            ) {
+              return { rows: [], rowCount: 0 };
+            }
+            return client.query(query, values as unknown[] | undefined);
+          },
+          release: () => client.release(),
+        };
+      },
+    } as unknown as Pool;
+
+    await expect(
+      new PostgresDeviceLeaseStore(bypassPool).acquire({
+        ...request,
+        jobId: "JOB-PG-BYPASS",
+        correlationId: "CORR-PG-BYPASS",
+      }),
+    ).rejects.toMatchObject({ code: "DEVICE_ALREADY_LEASED" });
+
+    const persisted = await pool.query<{
+      lease_id: string;
+      job_id: string;
+      fencing_token: string;
+    }>("SELECT lease_id, job_id, fencing_token FROM device_leases WHERE device_id = $1", [
+      request.deviceId,
+    ]);
+    expect(persisted.rows[0]).toEqual({
+      lease_id: first.leaseId,
+      job_id: first.jobId,
+      fencing_token: String(first.fencingToken),
+    });
+    const fencingAfter = await pool.query<{ last_token: string }>(
+      "SELECT last_token FROM device_fencing WHERE device_id = $1",
+      [request.deviceId],
+    );
+    expect(fencingAfter.rows[0]?.last_token).toBe(fencingBefore.rows[0]?.last_token);
+  });
+
   it("rejects every stale fencing token after lease replacement", async () => {
     const store = new PostgresDeviceLeaseStore(pool);
     const first = await store.acquire(request);

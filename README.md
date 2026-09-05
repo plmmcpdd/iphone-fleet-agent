@@ -31,3 +31,8 @@ Gate 顺序固定为：`A0 → A1 → A2 → A3 → A4 → A5 → A6 → M0+`。
 - `pnpm real-ios:e2e`：M0+ 之前固定失败，防止把 mock 结果误报为 real iOS
 
 Mac 接手清单见 [`docs/poc/mac-m0-handoff.md`](docs/poc/mac-m0-handoff.md)。
+
+## Runtime boundaries
+
+- `InMemoryDeviceLeaseStore` 只用于 mock、开发和单进程测试；它不提供多进程并发保证。production/durable runtime 必须使用 PostgreSQL `DeviceLeaseStore`。
+- `WorkflowEngine` 是 Phase A 声明并预留、但尚未 wired 的 Production Control Plane → Hatchet Adapter Port。它不代表自研 workflow；Job/workflow lifecycle 仍由 Hatchet 管理。

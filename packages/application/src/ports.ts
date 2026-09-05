@@ -84,6 +84,11 @@ export interface WorkflowRun {
   readonly state: "QUEUED" | "RUNNING" | "NEEDS_HUMAN" | "SUCCEEDED" | "FAILED";
 }
 
+/**
+ * Phase A reserved adapter port for Production Control Plane -> Hatchet.
+ * It is declared but not wired in Phase A and does not authorize a custom
+ * workflow implementation. Hatchet owns the Job/workflow lifecycle.
+ */
 export interface WorkflowEngine {
   submit(input: WorkflowSubmission): Promise<WorkflowRun>;
   get(jobId: JobId): Promise<WorkflowRun | undefined>;

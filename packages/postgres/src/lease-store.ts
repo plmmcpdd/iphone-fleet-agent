@@ -91,6 +91,7 @@ export class PostgresDeviceLeaseStore implements DeviceLeaseStore {
           fencing_token = EXCLUDED.fencing_token,
           expires_at = EXCLUDED.expires_at,
           updated_at = now()
+        WHERE device_leases.expires_at <= now()
         RETURNING *`,
         [
           request.deviceId,
@@ -105,9 +106,14 @@ export class PostgresDeviceLeaseStore implements DeviceLeaseStore {
           request.ttlMs,
         ],
       );
-      await client.query("COMMIT");
       const row = result.rows[0];
-      if (!row) throw new FleetError("LEASE_REQUIRED", "Lease insert returned no row");
+      if (!row) {
+        throw new FleetError(
+          "DEVICE_ALREADY_LEASED",
+          `Device ${request.deviceId} is already leased`,
+        );
+      }
+      await client.query("COMMIT");
       return mapLease(row);
     } catch (error) {
       await client.query("ROLLBACK");
