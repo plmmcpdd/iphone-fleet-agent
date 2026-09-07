@@ -1,5 +1,15 @@
 # iPhone Fleet Agent
 
+> Current state: **MA1 complete; MA2 is prepared but not started.** The repository has validated a governed mock/recorded-fixture Phone Operator path. It has **not** validated a real iPhone, MobileNext/WDA, or live GUI-Owl inference.
+
+Start here:
+
+- [Remote MA2 handoff](docs/handoff/MA2_REMOTE_AGENT_HANDOFF.md) — operational entrypoint for the next agent.
+- [Documentation index](docs/README.md) — architecture, decisions, OSS evidence, POCs, and handoffs.
+- [MA1 final report](docs/poc/ma1-mobile-agent-phone-operator-report.md) — findings, evidence, and explicit MA2 stop rules.
+
+The active MA1 branch is `feat/mobile-agent-phone-operator`; `fleet-mcp-v0.1-freeze` marks the frozen H0.1 `main` baseline. This is an R&D repository, not a production control system.
+
 独立的 iPhone Fleet Agent 项目：以通用 Phone Operator 与确定性 Fleet Control Plane 为目标。
 
 当前状态：Phase A Control Plane 已通过 A0～A6；H0 将 Fleet MCP 产品化为外部 Harness 的稳定边界。真实 iOS 验证仍等待 M0+ 的 macOS Device Lab。
@@ -37,4 +47,4 @@ Fleet MCP v0.1 契约见 [`docs/mcp/fleet-mcp-v0.1.md`](docs/mcp/fleet-mcp-v0.1.
 ## Runtime boundaries
 
 - `InMemoryDeviceLeaseStore` 只用于 mock、开发和单进程测试；它不提供多进程并发保证。production/durable runtime 必须使用 PostgreSQL `DeviceLeaseStore`。
-- `WorkflowEngine` 是 Phase A 声明并预留、但尚未 wired 的 Production Control Plane → Hatchet Adapter Port。它不代表自研 workflow；Job/workflow lifecycle 仍由 Hatchet 管理。
+- `WorkflowEngine` is now wired as the thin Control Plane → Hatchet adapter for MA1 Phone Operator work. It does not imply a self-built workflow engine; durable job/workflow lifecycle remains Hatchet-owned.

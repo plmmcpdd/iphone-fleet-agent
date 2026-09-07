@@ -29,3 +29,25 @@ tmp/
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Local credentials and Apple signing material (never commit)
+*.pem
+*.key
+*.p12
+*.pfx
+*.mobileprovision
+*.provisionprofile
+
+# Local model/checkpoint downloads and macOS build products
+.models/
+model-weights/
+checkpoints/
+hf-cache/
+*.safetensors
+*.gguf
+*.ckpt
+*.onnx
+DerivedData/
+*.xcarchive/
+.venv/
+venv/

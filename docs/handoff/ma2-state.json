@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0",
+  "handoff": "MA2_REMOTE_AGENT",
+  "generatedAt": "2026-09-07",
+  "status": "READY_FOR_OWNER_REVIEW_NOT_STARTED",
+  "activeBranch": "feat/mobile-agent-phone-operator",
+  "ma1Head": "88bfcd54e725d7257ce59249eec1cabc5bbb2e29",
+  "freeze": {
+    "branch": "main",
+    "commit": "04856398838d6af1b89ddebfcfbc80afd463dc65",
+    "annotatedTag": "fleet-mcp-v0.1-freeze"
+  },
+  "currentGate": "MA1_COMPLETE",
+  "nextGate": "MA2_ONE_IPHONE_PHONE_OPERATOR_POC",
+  "realIos": "NOT_TESTED",
+  "liveGuiOwl": "NOT_TESTED",
+  "allowedTarget": {
+    "phoneCount": 1,
+    "selection": "explicit UDID mapped to one Fleet deviceId",
+    "actions": "read-only or harmless approved test-screen actions only"
+  },
+  "hardStops": [
+    "Do not select the first connected device.",
+    "Stop on device/account/network/context mismatch.",
+    "Stop on missing, expired, or stale lease/fencing token.",
+    "Stop on WDA instability, incomplete Evidence, or an unapproved human gate.",
+    "Do not publish, message, pay, purchase, change profiles, or alter security settings."
+  ],
+  "requiredReadOrder": [
+    "docs/architecture/IPHONE_FLEET_AGENT_ARCHITECTURE_v0.1.md",
+    "docs/architecture/PHONE_OPERATOR_RUNTIME.md",
+    "docs/adr/0006-mobile-agent-reference-phone-operator.md",
+    "docs/oss/2026-09-07-ma1-mobile-agent-gui-owl.md",
+    "docs/poc/ma1-mobile-agent-phone-operator-report.md",
+    "docs/handoff/MA2_REMOTE_AGENT_HANDOFF.md"
+  ]
+}
