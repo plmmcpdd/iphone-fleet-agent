@@ -6,6 +6,7 @@ import type {
   DeviceVerification,
   DeviceVerificationResult,
   ExecutionContext,
+  PhoneObservation,
 } from "@iphone-fleet/contracts";
 import { FleetError } from "@iphone-fleet/domain";
 import type { Clock } from "./clock.js";
@@ -15,6 +16,7 @@ export interface MockDeviceOptions {
   readonly online?: boolean;
   readonly failExecution?: boolean;
   readonly failVerification?: boolean;
+  readonly failObservation?: boolean;
   readonly initialState?: Readonly<Record<string, unknown>>;
 }
 
@@ -37,6 +39,20 @@ export class MockDeviceBackend implements DeviceBackend {
     };
   }
 
+  public async observe(context: ExecutionContext): Promise<PhoneObservation> {
+    const options = this.options.get(context.deviceId) ?? {};
+    if (options.failObservation) {
+      throw new FleetError("OBSERVATION_FAILED", "Injected observation failure");
+    }
+    const state = this.deviceState.get(context.deviceId) ?? {};
+    return {
+      screenshotRef: `mock://${context.deviceId}/${this.calls.length}`,
+      screen: { width: 320, height: 568 },
+      foregroundApp: typeof state.foregroundApp === "string" ? state.foregroundApp : "SpringBoard",
+      observedAt: this.clock.now().toISOString(),
+    };
+  }
+
   public async execute(
     context: ExecutionContext,
     action: DeviceAction,
@@ -49,6 +65,13 @@ export class MockDeviceBackend implements DeviceBackend {
     }
     const state = this.deviceState.get(context.deviceId) ?? {};
     if (action.name === "set_state") Object.assign(state, action.parameters);
+    if (action.name === "open_app") state.foregroundApp = action.parameters.appName;
+    if (action.name === "tap") state.lastTap = action.parameters.coordinate;
+    if (action.name === "long_press") state.lastLongPress = action.parameters.coordinate;
+    if (action.name === "type_text") state.lastTyped = action.parameters.text;
+    if (action.name === "swipe") state.lastSwipe = action.parameters;
+    if (action.name === "home") state.foregroundApp = "SpringBoard";
+    if (action.name === "back") state.lastSystemButton = "Back";
     this.deviceState.set(context.deviceId, state);
     return { outcome: "SUCCEEDED", observed: structuredClone(state) };
   }

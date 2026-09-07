@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-07",
+  "upstreams": {
+    "mobileAgentV35": {
+      "repository": "https://github.com/X-PLUG/MobileAgent.git",
+      "path": "Mobile-Agent-v3.5",
+      "ref": "main",
+      "commit": "11cea575561fb7800b5fb6b6cafa56f7a91de11f",
+      "license": "MIT",
+      "checkout": ".runtime/upstream/MobileAgent",
+      "patchStatus": "unmodified-gitignored-checkout"
+    },
+    "guiOwl15_8bInstruct": {
+      "repository": "https://huggingface.co/mPLUG/GUI-Owl-1.5-8B-Instruct",
+      "ref": "main",
+      "commit": "06d5faecff74840bab2be2425e9c42667a5d04fc",
+      "license": "MIT",
+      "baseModel": "Qwen3-VL",
+      "baseModelLicense": "Apache-2.0",
+      "weightsDownloaded": false,
+      "patchStatus": "not-vendored"
+    }
+  }
+}

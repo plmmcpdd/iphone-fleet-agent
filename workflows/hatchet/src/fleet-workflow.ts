@@ -32,7 +32,30 @@ export type ActionInterval = {
 export class WorkflowProbe {
   readonly actionIntervals: ActionInterval[] = [];
   readonly humanWaitStarted = new Set<string>();
+  readonly maximumActiveByDevice = new Map<string, number>();
+  maximumActiveAcrossDevices = 0;
   private readonly waiters = new Map<string, () => void>();
+  private readonly activeByDevice = new Map<string, number>();
+  private activeAcrossDevices = 0;
+
+  markActionStarted(deviceId: string): void {
+    const activeForDevice = (this.activeByDevice.get(deviceId) ?? 0) + 1;
+    this.activeByDevice.set(deviceId, activeForDevice);
+    this.maximumActiveByDevice.set(
+      deviceId,
+      Math.max(this.maximumActiveByDevice.get(deviceId) ?? 0, activeForDevice),
+    );
+    this.activeAcrossDevices += 1;
+    this.maximumActiveAcrossDevices = Math.max(
+      this.maximumActiveAcrossDevices,
+      this.activeAcrossDevices,
+    );
+  }
+
+  markActionFinished(deviceId: string): void {
+    this.activeByDevice.set(deviceId, Math.max(0, (this.activeByDevice.get(deviceId) ?? 1) - 1));
+    this.activeAcrossDevices = Math.max(0, this.activeAcrossDevices - 1);
+  }
 
   markHumanWaitStarted(jobId: string): void {
     this.humanWaitStarted.add(jobId);
@@ -100,6 +123,7 @@ export function createFleetWorkflows(client: HatchetClient, probe: WorkflowProbe
         finishedAt: 0,
       };
       probe.actionIntervals.push(interval);
+      probe.markActionStarted(input.context.deviceId);
       try {
         if (input.failFirstActionAttempt && attempt === 0) {
           throw new Error("injected transient action failure");
@@ -108,6 +132,7 @@ export function createFleetWorkflows(client: HatchetClient, probe: WorkflowProbe
         return { action: "mock-tap", outcome: "executed" };
       } finally {
         interval.finishedAt = Date.now();
+        probe.markActionFinished(input.context.deviceId);
       }
     },
   });

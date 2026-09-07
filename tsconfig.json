@@ -8,6 +8,8 @@
     { "path": "packages/inmemory" },
     { "path": "packages/control-plane" },
     { "path": "packages/postgres" },
+    { "path": "packages/phone-operator" },
+    { "path": "packages/mobile-agent-operator" },
     { "path": "apps/fleetctl" },
     { "path": "apps/fleet-mcp" }
   ]

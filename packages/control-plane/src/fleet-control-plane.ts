@@ -5,7 +5,9 @@ import {
   type DeviceLeaseStore,
   type EvidenceRecord,
   type EvidenceSink,
+  type PhoneOperator,
   type RegistryReader,
+  type WorkflowEngine,
 } from "@iphone-fleet/application";
 import type {
   DeviceAction,
@@ -69,6 +71,8 @@ export interface FleetControlPlaneDependencies {
   readonly policy: PolicyEvaluator;
   readonly jobs?: InMemoryFleetJobStore;
   readonly clock?: Clock;
+  readonly createPhoneOperator?: (context: ExecutionContext) => PhoneOperator;
+  readonly workflowEngine?: WorkflowEngine;
 }
 
 export class FleetControlPlane {
@@ -182,6 +186,84 @@ export class FleetControlPlane {
         leaseStore: this.dependencies.leases,
         policy: this.dependencies.policy,
       });
+
+      if (input.action.name === "phone_operator_task") {
+        if (this.dependencies.workflowEngine) {
+          const workflowRun = await this.dependencies.workflowEngine.submit({
+            context,
+            action: input.action,
+            verification: input.verification,
+            workflowRevision: input.workflowRevision,
+          });
+          await this.appendEvidence(
+            context,
+            input,
+            "phone-operator-workflow-terminal",
+            workflowRun.state === "SUCCEEDED"
+              ? "SUCCEEDED"
+              : workflowRun.state === "NEEDS_HUMAN"
+                ? "NEEDS_HUMAN"
+                : "FAILED",
+            { workflowRun },
+          );
+          if (workflowRun.state === "NEEDS_HUMAN") {
+            terminalJob = this.updateJob(input, "NEEDS_HUMAN", context);
+            return terminalJob;
+          }
+          if (workflowRun.state !== "SUCCEEDED") {
+            terminalJob = this.updateJob(input, "FAILED", context, {
+              code: "ACTION_FAILED",
+              message: `PhoneOperator workflow ended in ${workflowRun.state}`,
+            });
+            return terminalJob;
+          }
+          terminalJob = this.updateJob(input, "SUCCEEDED", context);
+          return terminalJob;
+        }
+        const operator = this.dependencies.createPhoneOperator?.(context);
+        if (!operator) {
+          throw new FleetError("DEVICE_BACKEND_ERROR", "PhoneOperator runtime is not configured");
+        }
+        const parameters = input.action.parameters;
+        const operatorResult = await operator.run({
+          executionContext: context,
+          instruction: requiredString(parameters.instruction, "instruction"),
+          limits: {
+            maxSteps: positiveInteger(parameters.maxSteps, 20),
+            timeoutMs: positiveInteger(parameters.timeoutMs, 120_000),
+            maxConsecutiveFailures: positiveInteger(parameters.maxConsecutiveFailures, 3),
+          },
+          policyProfile: optionalString(parameters.policyProfile) ?? "ma1-safe-read-only",
+          verification: input.verification,
+          workflowRevision: input.workflowRevision,
+          metadata: isRecord(parameters.metadata) ? parameters.metadata : {},
+        });
+        await this.appendEvidence(
+          context,
+          input,
+          "phone-operator-terminal",
+          operatorResult.status === "SUCCEEDED"
+            ? "SUCCEEDED"
+            : operatorResult.status === "HUMAN_REQUIRED"
+              ? "NEEDS_HUMAN"
+              : "FAILED",
+          { operatorResult },
+        );
+        if (operatorResult.status === "HUMAN_REQUIRED") {
+          terminalJob = this.updateJob(input, "NEEDS_HUMAN", context);
+          return terminalJob;
+        }
+        if (operatorResult.status !== "SUCCEEDED") {
+          const failure = operatorResult.failure ?? {
+            code: "ACTION_FAILED",
+            message: "PhoneOperator did not succeed",
+          };
+          terminalJob = this.updateJob(input, "FAILED", context, failure);
+          return terminalJob;
+        }
+        terminalJob = this.updateJob(input, "SUCCEEDED", context);
+        return terminalJob;
+      }
 
       const health = await this.dependencies.backend.health(context.deviceId);
       if (!health.online) throw new FleetError("DEVICE_OFFLINE", "Device backend reports offline");
@@ -303,4 +385,30 @@ export class FleetControlPlane {
           message: error instanceof Error ? error.message : String(error),
         };
   }
+}
+
+function requiredString(value: unknown, field: string): string {
+  if (typeof value !== "string" || !value.trim()) {
+    throw new FleetError("INVALID_EXECUTION_CONTEXT", `PhoneOperator ${field} is required`);
+  }
+  return value;
+}
+
+function optionalString(value: unknown): string | undefined {
+  return typeof value === "string" && value.trim() ? value : undefined;
+}
+
+function positiveInteger(value: unknown, fallback: number): number {
+  if (value === undefined) return fallback;
+  if (!Number.isInteger(value) || (value as number) <= 0) {
+    throw new FleetError(
+      "INVALID_EXECUTION_CONTEXT",
+      "PhoneOperator limits must be positive integers",
+    );
+  }
+  return value as number;
+}
+
+function isRecord(value: unknown): value is Readonly<Record<string, unknown>> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }

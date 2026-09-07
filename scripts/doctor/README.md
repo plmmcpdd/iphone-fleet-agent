@@ -1,5 +1,7 @@
 # Mac POC doctor contract
 
+MA1 adds `mobile-agent-mac-doctor.ts`, the explicit-UDID readiness contract for the future MobileNext/WDA PhoneOperator path. It deliberately performs no device action on Windows and cannot emit a real-iOS PASS.
+
 H0 defines the doctor result model but does not claim a Mac result. A future macOS implementation must run every `macAutomaticCheckIds` check automatically and pass observations to `assessMacDoctor`.
 
 - Missing, failed, or unrun automatic checks make the result `BLOCKED`.

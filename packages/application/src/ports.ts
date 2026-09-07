@@ -6,11 +6,13 @@ import type {
   DeviceVerificationResult,
   ExecutionContext,
   JobId,
+  PhoneObservation,
 } from "@iphone-fleet/contracts";
 import type { AccountRecord, DeviceRecord, NetworkAssignmentRecord } from "@iphone-fleet/domain";
 
 export interface DeviceBackend {
   health(deviceId: DeviceId): Promise<{ readonly online: boolean; readonly observedAt: string }>;
+  observe(context: ExecutionContext): Promise<PhoneObservation>;
   execute(context: ExecutionContext, action: DeviceAction): Promise<DeviceActionResult>;
   verify(
     context: ExecutionContext,
@@ -73,7 +75,7 @@ export interface EvidenceSink {
 }
 
 export interface WorkflowSubmission {
-  readonly context: Omit<ExecutionContext, "leaseId" | "fencingToken">;
+  readonly context: ExecutionContext;
   readonly action: DeviceAction;
   readonly verification: DeviceVerification;
   readonly workflowRevision: string;

@@ -4,7 +4,15 @@
     "outDir": "dist",
     "rootDir": "src",
     "paths": {
-      "@iphone-fleet/contracts": ["../../packages/contracts/dist/index.d.ts"]
+      "@iphone-fleet/application": ["../../packages/application/dist/index.d.ts"],
+      "@iphone-fleet/control-plane": ["../../packages/control-plane/dist/index.d.ts"],
+      "@iphone-fleet/contracts": ["../../packages/contracts/dist/index.d.ts"],
+      "@iphone-fleet/domain": ["../../packages/domain/dist/index.d.ts"],
+      "@iphone-fleet/inmemory": ["../../packages/inmemory/dist/index.d.ts"],
+      "@iphone-fleet/mobile-agent-operator": [
+        "../../packages/mobile-agent-operator/dist/index.d.ts"
+      ],
+      "@iphone-fleet/phone-operator": ["../../packages/phone-operator/dist/index.d.ts"]
     }
   },
   "include": ["src/**/*.ts"]

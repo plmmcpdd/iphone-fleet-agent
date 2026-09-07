@@ -81,6 +81,14 @@ export async function authorizeDeviceAction(input: DeviceAuthorizationInput): Pr
     );
   }
 
+  const decision = await input.policy.evaluate(context, action);
+  if (decision.outcome === "DENY") {
+    throw new FleetError("POLICY_DENIED", decision.reason);
+  }
+  if (decision.outcome === "REQUIRE_HUMAN") {
+    throw new FleetError("HUMAN_REQUIRED", decision.reason);
+  }
+
   const lease = await input.leaseStore.validate(context);
   if (!lease.valid) {
     const mapping = {
@@ -90,13 +98,5 @@ export async function authorizeDeviceAction(input: DeviceAuthorizationInput): Pr
       CONTEXT_MISMATCH: "LEASE_CONTEXT_MISMATCH",
     } as const;
     throw new FleetError(mapping[lease.reason], `Lease validation failed: ${lease.reason}`);
-  }
-
-  const decision = await input.policy.evaluate(context, action);
-  if (decision.outcome === "DENY") {
-    throw new FleetError("POLICY_DENIED", decision.reason);
-  }
-  if (decision.outcome === "REQUIRE_HUMAN") {
-    throw new FleetError("HUMAN_REQUIRED", decision.reason);
   }
 }

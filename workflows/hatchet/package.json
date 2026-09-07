@@ -10,7 +10,13 @@
   },
   "dependencies": {
     "@hatchet-dev/typescript-sdk": "1.31.0",
+    "@iphone-fleet/application": "workspace:*",
+    "@iphone-fleet/control-plane": "workspace:*",
     "@iphone-fleet/contracts": "workspace:*",
+    "@iphone-fleet/domain": "workspace:*",
+    "@iphone-fleet/inmemory": "workspace:*",
+    "@iphone-fleet/mobile-agent-operator": "workspace:*",
+    "@iphone-fleet/phone-operator": "workspace:*",
     "zod": "4.5.4"
   },
   "devDependencies": {

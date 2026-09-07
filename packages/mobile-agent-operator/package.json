@@ -1,5 +1,5 @@
 {
-  "name": "@iphone-fleet/control-plane",
+  "name": "@iphone-fleet/mobile-agent-operator",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -17,9 +17,9 @@
     "@iphone-fleet/application": "workspace:*",
     "@iphone-fleet/contracts": "workspace:*",
     "@iphone-fleet/domain": "workspace:*",
-    "@iphone-fleet/inmemory": "workspace:*",
-    "@iphone-fleet/mobile-agent-operator": "workspace:*",
-    "@iphone-fleet/phone-operator": "workspace:*",
-    "@iphone-fleet/observability": "workspace:*"
+    "@iphone-fleet/phone-operator": "workspace:*"
+  },
+  "devDependencies": {
+    "@iphone-fleet/inmemory": "workspace:*"
   }
 }

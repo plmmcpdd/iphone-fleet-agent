@@ -11,9 +11,6 @@
     { "path": "../contracts" },
     { "path": "../domain" },
     { "path": "../application" },
-    { "path": "../inmemory" },
-    { "path": "../mobile-agent-operator" },
-    { "path": "../phone-operator" },
-    { "path": "../observability" }
+    { "path": "../phone-operator" }
   ]
 }

@@ -1,0 +1,24 @@
+{
+  "fixtureType": "RECORDED_MODEL_FIXTURE",
+  "proposals": [
+    {
+      "action": "open",
+      "text": "Settings",
+      "decisionSummary": "Open the harmless Settings app",
+      "tokenUsage": { "input": 120, "output": 20 }
+    },
+    {
+      "action": "swipe",
+      "coordinate": [500, 800],
+      "coordinate2": [500, 300],
+      "decisionSummary": "Navigate the Settings list",
+      "tokenUsage": { "input": 180, "output": 24 }
+    },
+    {
+      "action": "terminate",
+      "status": "success",
+      "decisionSummary": "Requested low-risk navigation is complete",
+      "tokenUsage": { "input": 210, "output": 18 }
+    }
+  ]
+}

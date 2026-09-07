@@ -19,6 +19,16 @@ export const fleetErrorCodes = [
   "VERIFICATION_FAILED",
   "EVIDENCE_WRITE_FAILED",
   "JOB_NOT_FOUND",
+  "OBSERVATION_FAILED",
+  "ACTION_FAILED",
+  "DEVICE_BACKEND_ERROR",
+  "MODEL_ERROR",
+  "MODEL_TIMEOUT",
+  "OPERATOR_CRASH",
+  "MAX_STEPS_EXCEEDED",
+  "TASK_TIMEOUT",
+  "UNSUPPORTED_OPERATOR_ACTION",
+  "OPERATOR_CANCELLED",
 ] as const;
 
 export type FleetErrorCode = (typeof fleetErrorCodes)[number];
