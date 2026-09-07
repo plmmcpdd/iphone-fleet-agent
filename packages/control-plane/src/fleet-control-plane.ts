@@ -81,7 +81,7 @@ export class FleetControlPlane {
   }
 
   public async status(): Promise<{
-    readonly contract: "MCP Contract v0.1-draft";
+    readonly service: "iphone-fleet-agent";
     readonly devices: number;
     readonly jobs: Record<FleetJobState, number>;
   }> {
@@ -94,7 +94,7 @@ export class FleetControlPlane {
     };
     for (const job of this.jobs.list()) counts[job.state] += 1;
     return {
-      contract: "MCP Contract v0.1-draft",
+      service: "iphone-fleet-agent",
       devices: (await this.dependencies.registry.listDevices()).length,
       jobs: counts,
     };

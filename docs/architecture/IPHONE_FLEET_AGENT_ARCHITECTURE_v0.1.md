@@ -2168,7 +2168,7 @@ Deterministic Replay
 开发 Gate 必须严格按以下顺序推进：
 
 ```text
-A0 → A1 → A2 → A3 → A4 → A5 → A6 → M0+
+A0 → A1 → A2 → A3 → A4 → A5 → A6 → H0 → M0+
 ```
 
 任何 Gate 未通过或未完成审核前，不得开始后续 Gate。
@@ -2214,11 +2214,15 @@ correlationId
 第 8.1 节中的 Fleet MCP 工具集合状态为：
 
 ```text
-MCP Contract v0.1-draft
+Fleet MCP Contract v0.1
 ```
 
-在 A2/M1 前不得将其视为长期冻结 API。
+H0.1 在 A2 验证完成后将 draft 产品化为版本化 v0.1 契约；未来变更必须按兼容性规则演进。
 
 ## 32.5 OpenAdapt A6 失败规则
 
 若 A6 的 OpenAdapt 验证失败，禁止直接自研 Flow Engine。必须重新执行 OSS Evaluation；只有成熟 OSS 候选均无法满足需求、且已形成自研 ADR 并获得人工批准后，才可提出自研实现。
+
+## 32.6 H0 MCP-first 产品边界
+
+Fleet MCP 是长期稳定产品边界，Harness 是外部宿主。Fleet 不自研聊天 UI、Agent Framework、模型 Router 或 Harness Router。可以选择并推荐一个效果最佳的 Reference Harness，其他 Harness 作为 compatibility target；任何 Harness 差异不得进入 domain/control-plane，且产品层推荐不得改变 Fleet MCP 的标准接口。H0 首轮候选仅限 DeepSeek Harness 与 MiMo Code；此前候选清单不构成本轮安装或评测授权。

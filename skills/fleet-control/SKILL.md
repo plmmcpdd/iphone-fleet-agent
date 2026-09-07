@@ -11,4 +11,4 @@ Before submitting a job, obtain explicit `clientId`, `accountId`, `deviceId`, an
 
 Treat submission as successful only when the terminal job is `SUCCEEDED` and `fleet_get_evidence` returns matching verified evidence. If context, lease, fencing, policy, device health, verification, or evidence fails, preserve the failure and request human review when appropriate.
 
-The Fleet MCP surface is `MCP Contract v0.1-draft`; inspect available tools instead of assuming long-term compatibility. Never claim mock or Windows validation proves real iOS behavior. Real-device work begins at the macOS Device Lab gates.
+The Fleet MCP surface is the versioned `Fleet MCP Contract v0.1`; discover tools and honor their schemas rather than relying on a specific Harness. Never claim mock or Windows validation proves real iOS behavior. Real-device work begins at the macOS Device Lab gates.

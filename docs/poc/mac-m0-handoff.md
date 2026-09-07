@@ -2,6 +2,8 @@
 
 Phase A validates only the Windows/WSL Control Plane and synthetic device paths. It does not validate a real iPhone.
 
+For a non-technical operator, load `skills/mac-poc-operator/SKILL.md` and follow the contracts in `scripts/doctor/README.md` and `scripts/bootstrap/README.md`. H0 creates those contracts only; it does not authorize or report a Mac PASS.
+
 ## Required Mac preparation
 
 - Clone this same repository; do not create a second long-lived source truth.

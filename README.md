@@ -2,7 +2,7 @@
 
 独立的 iPhone Fleet Agent 项目：以通用 Phone Operator 与确定性 Fleet Control Plane 为目标。
 
-当前状态：Phase A Control Plane 已通过 A0～A6；真实 iOS 验证仍等待 M0+ 的 macOS Device Lab。
+当前状态：Phase A Control Plane 已通过 A0～A6；H0 将 Fleet MCP 产品化为外部 Harness 的稳定边界。真实 iOS 验证仍等待 M0+ 的 macOS Device Lab。
 
 ## Architecture Baseline
 
@@ -16,12 +16,13 @@
 - WSL Ubuntu-E：仅在 A3、A4、A6 按需作为 Linux integration/runtime environment。
 - macOS：iOS Device Lab；M0+ 才依赖。
 
-Gate 顺序固定为：`A0 → A1 → A2 → A3 → A4 → A5 → A6 → M0+`。
+Gate 顺序固定为：`A0 → A1 → A2 → A3 → A4 → A5 → A6 → H0 → M0+`。
 
 ## 验证入口
 
 - `pnpm build` / `pnpm typecheck` / `pnpm lint`
 - `pnpm unit` / `pnpm contract` / `pnpm e2e-mock`
+- `pnpm mcp:black-box`：通过真实 stdio 子进程验证标准 MCP client
 - `pnpm integration:postgres`：Windows client + WSL user-local PostgreSQL
 - `pnpm integration:hatchet`：Windows build + WSL official Hatchet Embedded
 - `pnpm integration:openadapt`：WSL Python 3.12 no-device feasibility spike
@@ -31,6 +32,7 @@ Gate 顺序固定为：`A0 → A1 → A2 → A3 → A4 → A5 → A6 → M0+`。
 - `pnpm real-ios:e2e`：M0+ 之前固定失败，防止把 mock 结果误报为 real iOS
 
 Mac 接手清单见 [`docs/poc/mac-m0-handoff.md`](docs/poc/mac-m0-handoff.md)。
+Fleet MCP v0.1 契约见 [`docs/mcp/fleet-mcp-v0.1.md`](docs/mcp/fleet-mcp-v0.1.md)。Harness 共用验收见 [`docs/harness/compatibility-contract.md`](docs/harness/compatibility-contract.md)。
 
 ## Runtime boundaries
 

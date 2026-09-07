@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc -b",
     "typecheck": "tsc -p tsconfig.json --noEmit --composite false",
-    "start": "tsx src/main.ts"
+    "start": "node dist/main.js",
+    "dev": "tsx src/main.ts"
   },
   "dependencies": {
     "@iphone-fleet/control-plane": "workspace:*",

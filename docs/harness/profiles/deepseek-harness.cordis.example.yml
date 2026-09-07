@@ -1,0 +1,12 @@
+# Example only. Merge into a dedicated DeepSeek Harness profile after its install Gate.
+- id: mcp-fleet
+  name: '@deepseek-ai/dsh-mcp-client'
+  config:
+    serverName: fleet
+    transport: stdio
+    command: node
+    args:
+      - /ABSOLUTE/PATH/TO/iphone-fleet-agent/apps/fleet-mcp/dist/main.js
+    cwd: /ABSOLUTE/PATH/TO/iphone-fleet-agent
+    toolCallTimeoutMs: 60000
+    failOnStartupError: true

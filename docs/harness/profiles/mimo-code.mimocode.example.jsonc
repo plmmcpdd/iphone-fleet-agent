@@ -1,0 +1,11 @@
+{
+  "$schema": "https://mimo.xiaomi.com/mimocode/config.json",
+  "mcp": {
+    "fleet": {
+      "type": "local",
+      "command": ["node", "/ABSOLUTE/PATH/TO/iphone-fleet-agent/apps/fleet-mcp/dist/main.js"],
+      "enabled": true,
+      "timeout": 60000
+    }
+  }
+}
